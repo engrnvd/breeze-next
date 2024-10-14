@@ -1,9 +1,11 @@
-import SignUpForm from '@/app/(auth)/register/SignUpForm'
+import AuthForm from '@/app/(auth)/register/AuthForm'
 
 export default function page() {
   return (
-    <div className="p-4">
-      <SignUpForm/>
-    </div>
+    <AuthForm
+      title="Sign Up"
+      subTitle="Enter your information to create an account"
+      role="register"
+    />
   )
 }
