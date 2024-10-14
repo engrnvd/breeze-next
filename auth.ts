@@ -18,7 +18,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         // logic to verify if the user exists
         user = await new Promise(resolve => setTimeout(() => {
-          resolve({ email: credentials.email, password: pwHash })
+          if (credentials.email === '08es34@gmail.com' && credentials.password !== '123456')
+            resolve({ email: credentials.email, password: pwHash })
+          else
+            resolve(null)
         }, 500))
 
         if (!user) {
