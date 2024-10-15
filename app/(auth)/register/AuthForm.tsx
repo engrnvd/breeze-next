@@ -1,6 +1,7 @@
 'use client'
 
-import { signupAction } from '@/actions/auth'
+import { loginAction } from '@/actions/auth-actions'
+import FieldErrors from '@/components/common/FieldErrors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -20,7 +21,19 @@ export default function AuthForm(
     role,
   }: Props
 ) {
-  const [error, formAction, loading] = useActionState(signupAction, '')
+  // const action = useMemo(() => {
+  //   switch (role) {
+  //     case 'register':
+  //       return signupAction
+  //     case 'login':
+  //       return loginAction
+  //     case 'forgot-password':
+  //       return signupAction
+  //     case 'reset-password':
+  //       return signupAction
+  //   }
+  // }, [role])
+  const [state, formAction, loading] = useActionState(loginAction, null)
 
   return (
     <div className="mx-auto max-w-sm space-y-6 py-8">
@@ -32,16 +45,19 @@ export default function AuthForm(
         {role === 'register' && (
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" name="name" placeholder="John Doe" required/>
+            <Input defaultValue={state?.values?.name} id="name" name="name" required/>
+            <FieldErrors errors={state?.errors?.name}/>
           </div>
         )}
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" placeholder="john@example.com" required type="email"/>
+          <Input defaultValue={state?.values?.email} id="email" name="email" required type="email"/>
+          <FieldErrors errors={state?.errors?.email}/>
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <Input id="password" name="password" required type="password"/>
+          <FieldErrors errors={state?.errors?.password}/>
         </div>
         {
           role === 'register' && (
@@ -51,9 +67,11 @@ export default function AuthForm(
             </div>
           )
         }
+
         {
-          error && <div className="text-red-900 text-sm">{JSON.stringify(error, null, 2)}</div>
+          !state?.errors && state?.message && <FieldErrors errors={[state?.message]}/>
         }
+
         <Button className="w-full" type="submit" disabled={loading}>
           {loading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin"/>}
           {title}
