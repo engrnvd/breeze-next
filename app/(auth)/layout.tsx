@@ -1,11 +1,15 @@
+import { auth } from '@/auth'
 import ApplicationLogo from '@/components/common/ApplicationLogo'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { HTMLAttributes } from 'react'
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-}
+type Props = HTMLAttributes<HTMLDivElement>
 
-export default function Layout({ children }: Props) {
+export default async function Layout({ children }: Props) {
+  const session = await auth()
+  if (session?.user) return redirect('/dashboard')
+
   return (
     <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
       <div>

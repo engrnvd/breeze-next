@@ -1,14 +1,16 @@
 import { logoutAction } from '@/actions/auth-actions'
 import { auth } from '@/auth'
+import { apiFetch } from '@/lib/fetch'
 
 export default async function Page() {
   const session = await auth()
-  if (!session?.user) return <div>no</div>
+  const user = await apiFetch('user')
 
   return (
     <div>
       <pre className="p-4">
         {JSON.stringify(session, null, 2)}
+        {JSON.stringify(user, null, 2)}
       </pre>
       <form action={logoutAction}>
         <button

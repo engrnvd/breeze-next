@@ -11,28 +11,11 @@ declare module 'next-auth' {
   }
 }
 
-declare module 'next-auth/jwt' {
-  interface JWT {
-    access_token?: string
-    id?: string
-  }
-}
-
 export const authConfig = {
   pages: {
     signIn: '/login',
   },
   callbacks: {
-    async authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard')
-      if (isOnDashboard) {
-        return isLoggedIn // false will redirect to config.pages.signIn
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/dashboard', nextUrl))
-      }
-      return true
-    },
     jwt({ token, user }) {
       if (user) { // User is available during sign-in
         token.id = user.id

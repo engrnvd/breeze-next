@@ -11,7 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
+      async authorize(credentials) {
         const res = await apiFetch('login', {
           method: 'POST',
           body: JSON.stringify({
@@ -19,10 +19,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password: credentials.password,
           }),
         })
+        console.log('res', res)
 
-        if (res.status === 'fail') {
-          throw new Error('Authentication failed')
-        }
+        if (!res.user || !res.token) return null
 
         return { ...res.user, token: res.token }
       },

@@ -4,15 +4,25 @@ import { signIn, signOut } from '@/auth'
 import { apiFetch } from '@/lib/fetch'
 import { AuthState } from '@/types/auth-types'
 import { AuthError } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 export async function loginAction(prevState: AuthState, formData: FormData): Promise<AuthState> {
   try {
     await signIn('credentials', formData)
   } catch (error) {
-    console.log('error', error)
-    if (error instanceof AuthError) return { message: 'Invalid credentials.' }
-    return { message: 'Something went wrong.' }
+    if (error instanceof AuthError) return {
+      message: 'Invalid credentials.',
+      values: { email: formData.get('email')?.toString() }
+    }
+
+    // todo: remove this conditional when next v15 and next-auth v5 are stable
+    if (error?.toString().includes('NEXT_REDIRECT')) {
+      redirect('/dashboard')
+    }
+
+    return { message: 'Something went wrong.' + error }
   }
+
   return null
 }
 
