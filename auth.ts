@@ -1,25 +1,31 @@
-import axios from '@/lib/axios'
-import { User } from '@/types/auth-types'
+import { authConfig } from '@/auth.config'
+import { apiFetch } from '@/lib/fetch'
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // E.g., domain, username, password, 2FA token, etc.
       credentials: {
         email: {},
         password: {},
       },
-      authorize: async () => {
-        const response: { data: User } = await axios.get('/api/user')
-        console.log('response', response)
-        return response.data
+      authorize: async (credentials) => {
+        const res = await apiFetch('login', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+        })
+
+        if (res.status === 'fail') {
+          throw new Error('Authentication failed')
+        }
+
+        return { ...res.user, token: res.token }
       },
     }),
   ],
-  pages: {
-    signIn: '/login',
-  }
 })

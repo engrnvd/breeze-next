@@ -1,11 +1,11 @@
 export type AuthState = {
   message: string,
-  errors: {
+  errors?: {
     email?: string[],
     name?: string[],
     password?: string[],
   },
-  values: {
+  values?: {
     email?: string,
     name?: string,
   }
