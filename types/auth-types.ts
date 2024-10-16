@@ -8,6 +8,8 @@ export type AuthState = {
   values?: {
     email?: string,
     name?: string,
+    password?: string,
+    password_confirmation?: string,
   }
 } | null
 

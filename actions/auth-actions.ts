@@ -31,28 +31,30 @@ export async function loginAction(prevState: AuthState, formData: FormData): Pro
 }
 
 export async function signupAction(prevState: AuthState, formData: FormData): Promise<AuthState> {
-  let error = null
+  const data = {
+    name: formData.get('name')?.toString(),
+    email: formData.get('email')?.toString(),
+    password: formData.get('password')?.toString(),
+    password_confirmation: formData.get('password_confirmation')?.toString(),
+  }
   try {
-    const res = await apiFetch('register', {
+    const res = await apiFetch('api/register', {
       method: 'POST',
-      body: JSON.stringify({
-        name: formData.get('name'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-        password_confirmation: formData.get('password_confirmation'),
-      })
+      body: JSON.stringify(data)
     })
 
-    console.log('res', res)
+    if (res.errors) return { ...res, values: data }
+
     return logUserIn(formData)
   } catch (err) {
-    // error = err.response?.data || err.message || err
-    console.error('error', err)
+    return {
+      message: err?.message || 'Something went wrong.',
+      values: data,
+    }
   }
-
-  return error
 }
 
 export async function logoutAction(formData: FormData) {
+  // todo: logout from laravel server
   await signOut()
 }

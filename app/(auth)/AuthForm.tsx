@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoaderCircle } from 'lucide-react'
+import Link from 'next/link'
 import { HTMLAttributes, useActionState, useMemo } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -39,7 +40,7 @@ export default function AuthForm(
     <div className="mx-auto max-w-sm space-y-6 py-8">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">{title}</h1>
-        <p className="text-gray-500 dark:text-gray-400">{subTitle}</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">{subTitle}</p>
       </div>
       <form action={formAction} className="space-y-4">
         {role === 'register' && (
@@ -54,16 +55,21 @@ export default function AuthForm(
           <Input defaultValue={state?.values?.email} id="email" name="email" required type="email"/>
           <FieldErrors errors={state?.errors?.email}/>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" name="password" required type="password"/>
-          <FieldErrors errors={state?.errors?.password}/>
-        </div>
+        {
+          role !== 'forgot-password' && (
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input defaultValue={state?.values?.password} id="password" name="password" required type="password"/>
+              <FieldErrors errors={state?.errors?.password}/>
+            </div>
+          )
+        }
         {
           role === 'register' && (
             <div className="space-y-2">
               <Label htmlFor="password">Confirm Password</Label>
-              <Input id="password_confirmation" name="password_confirmation" required type="password"/>
+              <Input defaultValue={state?.values?.password_confirmation} id="password_confirmation"
+                     name="password_confirmation" required type="password"/>
             </div>
           )
         }
@@ -77,19 +83,29 @@ export default function AuthForm(
           {title}
         </Button>
       </form>
-      <div className="text-center">
+
+      <div className="text-center space-y-4 flex flex-col">
         {
           role !== 'login' && (
-            <a href="/login" className="text-sm text-primary hover:text-primary-dark">
-              Already have an account? Log in
-            </a>
+            <Link href="/login" className="text-sm text-primary hover:text-primary-dark">
+              {role === 'register' ? 'Already have an account? Log in' : 'Back to login'}
+            </Link>
           )
         }
         {
-          role !== 'register' && (
-            <a href="/register" className="text-sm text-primary hover:text-primary-dark">
-              Don&#39;t have an account yet? Sign up
-            </a>
+          role === 'login' && (
+            <Link href="/forgot-password" className="text-sm text-primary hover:text-primary-dark">
+              Forgot your password?
+            </Link>
+          )
+        }
+        {
+          !['register', 'forgot-password'].includes(role) && (
+            <Button asChild variant="outline">
+              <Link className="text-sm text-primary hover:text-primary-dark" href="/register">
+                Don&#39;t have an account yet? Sign up
+              </Link>
+            </Button>
           )
         }
       </div>

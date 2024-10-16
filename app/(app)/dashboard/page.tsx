@@ -4,7 +4,7 @@ import { apiFetch } from '@/lib/fetch'
 
 export default async function Page() {
   const session = await auth()
-  const user = await apiFetch('user')
+  const user = await apiFetch('api/user')
 
   return (
     <div>

@@ -12,14 +12,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        const res = await apiFetch('login', {
+        const res = await apiFetch('api/login', {
           method: 'POST',
           body: JSON.stringify({
             email: credentials.email,
             password: credentials.password,
           }),
         })
-        console.log('res', res)
 
         if (!res.user || !res.token) return null
 
