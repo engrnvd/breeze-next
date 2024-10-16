@@ -1,5 +1,5 @@
 import { auth } from '@/auth'
-import ApplicationLogo from '@/components/common/ApplicationLogo'
+import AppLogo from '@/components/common/AppLogo'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { HTMLAttributes } from 'react'
@@ -14,7 +14,7 @@ export default async function Layout({ children }: Props) {
     <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
       <div>
         <Link href="/">
-          <ApplicationLogo className="w-20 h-20 fill-current text-gray-500"/>
+          <AppLogo className="w-20 h-20 fill-current text-gray-500"/>
         </Link>
       </div>
 
