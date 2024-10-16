@@ -6,7 +6,7 @@ import { AuthState } from '@/types/auth-types'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
 
-export async function loginAction(prevState: AuthState, formData: FormData): Promise<AuthState> {
+async function logUserIn(formData: FormData) {
   try {
     await signIn('credentials', formData)
   } catch (error) {
@@ -26,24 +26,29 @@ export async function loginAction(prevState: AuthState, formData: FormData): Pro
   return null
 }
 
+export async function loginAction(prevState: AuthState, formData: FormData): Promise<AuthState> {
+  return logUserIn(formData)
+}
+
 export async function signupAction(prevState: AuthState, formData: FormData): Promise<AuthState> {
   let error = null
-  await apiFetch('register', {
-    method: 'POST',
-    body: JSON.stringify({
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      password_confirmation: formData.get('password_confirmation'),
+  try {
+    const res = await apiFetch('register', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        password_confirmation: formData.get('password_confirmation'),
+      })
     })
-  }).then((res) => {
-    // todo: sign in
+
     console.log('res', res)
-    signIn('credentials', { redirectTo: '/dashboard' })
-  }).catch((err) => {
-    error = err.response?.data || err.message || err
+    return logUserIn(formData)
+  } catch (err) {
+    // error = err.response?.data || err.message || err
     console.error('error', err)
-  })
+  }
 
   return error
 }

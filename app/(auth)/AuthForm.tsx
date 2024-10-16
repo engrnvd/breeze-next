@@ -1,12 +1,12 @@
 'use client'
 
-import { loginAction } from '@/actions/auth-actions'
+import { loginAction, signupAction } from '@/actions/auth-actions'
 import FieldErrors from '@/components/common/FieldErrors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoaderCircle } from 'lucide-react'
-import { HTMLAttributes, useActionState } from 'react'
+import { HTMLAttributes, useActionState, useMemo } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   title: string,
@@ -21,19 +21,19 @@ export default function AuthForm(
     role,
   }: Props
 ) {
-  // const action = useMemo(() => {
-  //   switch (role) {
-  //     case 'register':
-  //       return signupAction
-  //     case 'login':
-  //       return loginAction
-  //     case 'forgot-password':
-  //       return signupAction
-  //     case 'reset-password':
-  //       return signupAction
-  //   }
-  // }, [role])
-  const [state, formAction, loading] = useActionState(loginAction, null)
+  const action = useMemo(() => {
+    switch (role) {
+      case 'register':
+        return signupAction
+      case 'login':
+        return loginAction
+      case 'forgot-password':
+        return signupAction
+      case 'reset-password':
+        return signupAction
+    }
+  }, [role])
+  const [state, formAction, loading] = useActionState(action, null)
 
   return (
     <div className="mx-auto max-w-sm space-y-6 py-8">

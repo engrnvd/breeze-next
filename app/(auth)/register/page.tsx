@@ -1,4 +1,4 @@
-import AuthForm from '@/app/(auth)/register/AuthForm'
+import AuthForm from '@/app/(auth)/AuthForm'
 
 export default function page() {
   return (
