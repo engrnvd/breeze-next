@@ -1,4 +1,5 @@
 export type AuthState = {
+  status?: 'success' | 'error'
   message: string,
   errors?: {
     email?: string[],
