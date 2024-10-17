@@ -1,5 +1,8 @@
-import { logoutAction } from '@/actions/auth-actions'
+import EmailVerifiedMessage from '@/app/(app)/dashboard/verify-email/EmailVerifiedMessage'
+import VerifyEmail from '@/app/(app)/dashboard/verify-email/VerifyEmail'
 import { auth } from '@/auth'
+import Container from '@/components/common/Container'
+import Header from '@/components/common/Header'
 import { apiFetch } from '@/lib/fetch'
 
 export default async function Page() {
@@ -7,17 +10,17 @@ export default async function Page() {
   const user = await apiFetch('api/user')
 
   return (
-    <div>
-      <pre className="p-4">
-        {JSON.stringify(session, null, 2)}
-        {JSON.stringify(user, null, 2)}
-      </pre>
-      <form action={logoutAction}>
-        <button
-          className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-          Sign Out
-        </button>
-      </form>
-    </div>
+    <>
+      <Header title="Dashboard"/>
+      <Container className="py-6">
+        <EmailVerifiedMessage/>
+
+        {!user?.email_verified_at && <VerifyEmail/>}
+
+        <div className="text-lg py-6">
+          Welcome {session?.user?.name}!
+        </div>
+      </Container>
+    </>
   )
 }

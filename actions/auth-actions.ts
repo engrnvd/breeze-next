@@ -113,3 +113,17 @@ export async function logoutAction(formData: FormData) {
   // todo: logout from laravel server
   await signOut()
 }
+
+export async function resendVerificationEmailAction(): Promise<AuthState> {
+  try {
+    const res = await apiFetch('api/email/verification-notification', { method: 'POST' })
+
+    if (res.errors) return { ...res }
+
+    return { message: res.status, status: 'success' }
+  } catch (err) {
+    return {
+      message: err?.message || 'Something went wrong.',
+    }
+  }
+}
