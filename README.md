@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Laravel Breeze - Next.js Edition ▲
 
-## Getting Started
+## With TypeScript and Server-first Approach
 
-First, run the development server:
+## Introduction
+
+This repository is an implementation of the [Laravel Breeze](https://laravel.com/docs/starter-kits) application
+with [Next.js](https://nextjs.org) serving as the frontend.
+
+There is an [official implementation here](https://github.com/laravel/breeze-next) which is written by the Laravel team
+using JavaScript. This implementation is different from the official one in the following ways:
+
+- It is written in TypeScript instead of JavaScript
+- Instead of using Next.js purely as a frontend application, it utilizes the backend capabilities of the framework. All
+  data fetching is handled on the server side,
+  following [the best practices recommended by Next.js](https://nextjs.org/docs/app/building-your-application/data-fetching).
+- It uses the powerful and officially recommended auth library [Auth.js](https://authjs.dev/) (previously known as
+  NextAuth.js) as the authentication library. This enables
+  us to access the current user's session on the server side and prepare the response accordingly, among other benefits.
+- It uses the new React 19 hook [useActionState](https://react.dev/reference/react/useActionState)
+  and [Next.js server actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+  for smooth `<form>` experience and data
+  security.
+- It uses [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/) to build the user interface.
+
+## Installation
+
+### 1. Set up Breeze
+
+You can skip this step if you have already set up Breeze. There is nothing different
+from [the official instructions](https://laravel.com/docs/starter-kits#laravel-breeze).
+
+Here is how you install Laravel Breeze into
+a [fresh Laravel application](https://laravel.com/docs/installation):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Create the Laravel application...
+laravel new next-backend
+
+cd next-backend
+
+# Install Breeze and dependencies...
+composer require laravel/breeze --dev
+
+php artisan breeze:install api
+
+# Run database migrations...
+php artisan migrate
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Please ensure that your application's `APP_URL` and `FRONTEND_URL` environment variables are set to
+`http://localhost:8000` and `http://localhost:3000`, respectively.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You may serve the Laravel application by running:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+php artisan serve
+```
 
-## Learn More
+### 2. Set up Laravel to accept incoming requests from the Next.js server
 
-To learn more about Next.js, take a look at the following resources:
+Now that Breeze is set up, you will need to make necessary changes to accommodate the requests coming from the Next.js
+server.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 1. Install the package
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+composer require naveed/breeze-next
+```
 
-## Deploy on Vercel
+#### 2. Run the command
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Run the following command to set up the application automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+php artisan breeze-next:setup 
+```
+
+This command will automatically make necessary changes to the following files in your project:
+
+```
+app/Http/Controllers/Auth/AuthenticatedSessionController.php
+app/Http/Controllers/Auth/RegisteredUserController.php
+app/Http/Controllers/Auth/VerifyEmailController.php
+config/sanctum.php
+routes/api.php
+routes/auth.php
+routes/web.php
+.env
+```
+
+#### 3. Follow the instructions
+
+##### a. Match `.env` files
+
+As instructed by the command output:
+
+1. Copy the environment variable `BREEZE_NEXT_CSRF_KEY` from your `.env`
+2. Clone this repository to get your starter Next.js application
+3. Add `BREEZE_NEXT_CSRF_KEY=<your-key-in-dot-env>`
+   in the `.env.local` file in the root of your Next.js application.
+
+##### b. Check your `User` model
+
+Make sure your `User` model uses the `Laravel\Sanctum\HasApiTokens` trait.
+
+### 3. Run the application
+
+Next, run the clone of this repository like any other Next.js application:
+
+1. Install its dependencies with `pnpm install` or `yarn install` or `npm install`.
+2. Run the application via `pnpm dev` or `yarn dev` or `npm run dev`.
