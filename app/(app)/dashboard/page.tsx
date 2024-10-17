@@ -14,12 +14,14 @@ export default async function Page() {
     <>
       <Header title="Dashboard"/>
       <Container className="py-6">
-        <EmailVerifiedMessage/>
+        <div className="max-w-4xl mx-auto space-y-4">
+          <div className="text-lg">
+            Welcome {session?.user?.name}!
+          </div>
 
-        {!user?.email_verified_at && <VerifyEmail/>}
+          <EmailVerifiedMessage/>
 
-        <div className="text-lg py-6">
-          Welcome {session?.user?.name}!
+          {!user?.email_verified_at && <VerifyEmail/>}
         </div>
       </Container>
     </>
