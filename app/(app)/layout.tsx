@@ -1,11 +1,9 @@
 import { auth } from '@/auth'
 import PageNav from '@/components/app-nav/PageNav'
 import { redirect } from 'next/navigation'
-import { HTMLAttributes } from 'react'
+import { ReactNode } from 'react'
 
-type Props = HTMLAttributes<HTMLDivElement>
-
-export default async function AppLayout({ children }: Props) {
+export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth()
   if (!session?.user) redirect('/login')
 

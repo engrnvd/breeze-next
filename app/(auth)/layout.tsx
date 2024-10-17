@@ -2,11 +2,9 @@ import { auth } from '@/auth'
 import AppLogo from '@/components/common/AppLogo'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { HTMLAttributes } from 'react'
+import { ReactNode } from 'react'
 
-type Props = HTMLAttributes<HTMLDivElement>
-
-export default async function Layout({ children }: Props) {
+export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth()
   if (session?.user) return redirect('/dashboard')
 
