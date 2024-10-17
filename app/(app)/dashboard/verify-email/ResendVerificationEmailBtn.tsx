@@ -1,4 +1,5 @@
 import { resendVerificationEmailAction } from '@/actions/auth-actions'
+import AlertSuccess from '@/components/common/AlertSuccess'
 import { Button } from '@/components/ui/button'
 import { LoaderCircle } from 'lucide-react'
 import { HTMLAttributes, useActionState } from 'react'
@@ -12,10 +13,10 @@ export default function ResendVerificationEmailBtn({}: Props) {
     <>
       {
         state?.message === 'verification-link-sent' ? (
-          <div className="font-medium text-sm text-green-600">
+          <AlertSuccess className="text-sm">
             A new verification link has been sent to the email address
             you provided during registration.
-          </div>
+          </AlertSuccess>
         ) : (
           <form action={formAction}>
             <Button type="submit" disabled={loading}>

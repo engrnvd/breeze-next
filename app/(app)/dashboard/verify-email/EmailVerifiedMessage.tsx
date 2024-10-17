@@ -1,5 +1,6 @@
 'use client'
 
+import AlertSuccess from '@/components/common/AlertSuccess'
 import { useSearchParams } from 'next/navigation'
 import { HTMLAttributes } from 'react'
 
@@ -9,7 +10,7 @@ export default function EmailVerifiedMessage({}: Props) {
   const searchParams = useSearchParams()
   const verified = searchParams.get('verified')
 
-  return verified ? <div className="bg-green-100 text-green-950 rounded p-4">
+  return verified ? <AlertSuccess>
     Thank you for verifying your email!
-  </div> : null
+  </AlertSuccess> : null
 }

@@ -15,7 +15,22 @@ export type AuthState = {
 } | null
 
 export type User = {
+  id: number,
   email: string,
   name?: string,
   password?: string,
+  email_verified_at?: string,
+  created_at?: string,
+  updated_at?: string,
+}
+
+declare module 'next-auth' {
+  interface User {
+    id?: string
+    token?: string
+  }
+
+  interface Session {
+    access_token?: string
+  }
 }

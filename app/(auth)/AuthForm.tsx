@@ -1,6 +1,7 @@
 'use client'
 
 import { forgotPasswordAction, loginAction, resetPasswordAction, signupAction } from '@/actions/auth-actions'
+import AlertSuccess from '@/components/common/AlertSuccess'
 import FieldErrors from '@/components/common/FieldErrors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -51,7 +52,7 @@ export default function AuthForm(
         <h1 className="text-3xl font-bold">{title}</h1>
         <p className="text-gray-500 text-sm">{subTitle}</p>
         {
-          reset && <p className="text-green-600 text-sm">{reset}</p>
+          reset && <AlertSuccess className="text-sm">{reset}</AlertSuccess>
         }
       </div>
       <form action={formAction} className="space-y-4">
@@ -91,7 +92,7 @@ export default function AuthForm(
         }
         {
           state?.message && state?.status === 'success' && (
-            <div className="text-green-600 text-sm">{state.message}</div>
+            <AlertSuccess className="text-sm">{state.message}</AlertSuccess>
           )
         }
 

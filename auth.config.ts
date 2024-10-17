@@ -1,16 +1,5 @@
 import type { NextAuthConfig } from 'next-auth'
 
-declare module 'next-auth' {
-  interface User {
-    id?: string
-    token?: string
-  }
-
-  interface Session {
-    access_token?: string
-  }
-}
-
 export const authConfig = {
   pages: {
     signIn: '/login',

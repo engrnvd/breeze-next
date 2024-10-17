@@ -4,10 +4,11 @@ import { auth } from '@/auth'
 import Container from '@/components/common/Container'
 import Header from '@/components/common/Header'
 import { apiFetch } from '@/lib/fetch'
+import { User } from '@/types/auth-types'
 
 export default async function Page() {
   const session = await auth()
-  const user = await apiFetch('api/user')
+  const user: User | null = await apiFetch('api/user')
 
   return (
     <>

@@ -20,7 +20,7 @@ async function logUserIn(formData: FormData) {
       redirect('/dashboard')
     }
 
-    return { message: 'Something went wrong.' + error }
+    return { message: error?.toString() || 'Something went wrong.' }
   }
 
   return null
@@ -48,7 +48,7 @@ export async function signupAction(prevState: AuthState, formData: FormData): Pr
     return logUserIn(formData)
   } catch (err) {
     return {
-      message: err?.message || 'Something went wrong.',
+      message: err?.toString() || 'Something went wrong.',
       values: data,
     }
   }
@@ -67,7 +67,7 @@ export async function forgotPasswordAction(prevState: AuthState, formData: FormD
     return { message: res.status, status: 'success' }
   } catch (err) {
     return {
-      message: err?.message || 'Something went wrong.',
+      message: err?.toString() || 'Something went wrong.',
       values: data,
     }
   }
@@ -92,7 +92,7 @@ export async function resetPasswordAction(token: string, prevState: AuthState, f
 
   } catch (err) {
     return {
-      message: err?.message || 'Something went wrong.',
+      message: err?.toString() || 'Something went wrong.',
       values: data,
     }
   }
@@ -109,8 +109,8 @@ export async function resetPasswordAction(token: string, prevState: AuthState, f
   return null
 }
 
-export async function logoutAction(formData: FormData) {
-  // todo: logout from laravel server
+export async function logoutAction() {
+  await apiFetch('api/logout', { method: 'POST' })
   await signOut()
 }
 
@@ -122,8 +122,6 @@ export async function resendVerificationEmailAction(): Promise<AuthState> {
 
     return { message: res.status, status: 'success' }
   } catch (err) {
-    return {
-      message: err?.message || 'Something went wrong.',
-    }
+    return { message: err?.toString() || 'Something went wrong.' }
   }
 }
